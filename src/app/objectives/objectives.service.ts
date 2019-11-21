@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import { take, tap } from "rxjs/operators";
 
 import { Objective, Task } from "./objective.model";
 
@@ -29,5 +30,14 @@ export class ObjectivesService {
       ])
     ];
     this._objectives.next(objectives);
+  }
+
+  createObjective(objective: Objective) {
+    return this.objectives.pipe(
+      take(1),
+      tap(objectives => {
+        this._objectives.next(objectives.concat(objective));
+      })
+    );
   }
 }
