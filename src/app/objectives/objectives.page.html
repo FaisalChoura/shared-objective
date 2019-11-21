@@ -8,6 +8,13 @@
 </ion-header>
 
 <ion-content>
+  <ion-virtual-scroll [items]="objectives" approxItemHeight="70px">
+    <ion-item *virtualItem="let objective">
+      <ion-label>
+        <h2>{{objective.title}}</h2>
+      </ion-label>
+    </ion-item>
+  </ion-virtual-scroll>
   <ion-fab vertical="bottom" horizontal="end">
     <ion-fab-button routerLink="/objectives/new">
       <ion-icon name="add"></ion-icon>
