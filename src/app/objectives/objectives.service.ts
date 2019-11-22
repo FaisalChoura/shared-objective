@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { take, tap } from "rxjs/operators";
+import { take, tap, switchMap } from "rxjs/operators";
 
 import { Objective, Task } from "./objective.model";
 
@@ -16,13 +16,13 @@ export class ObjectivesService {
 
   constructor() {
     const objectives: Objective[] = [
-      new Objective("Summer Trip 2020", [
+      new Objective("123", "Summer Trip 2020", [
         new Task(
           "Check available times",
           "Contact everyone and check their free times"
         )
       ]),
-      new Objective("Plan April Web Summit", [
+      new Objective("345", "Plan April Web Summit", [
         new Task(
           "Collect vendor data",
           "Contact all vendors and request their data"
@@ -30,6 +30,15 @@ export class ObjectivesService {
       ])
     ];
     this._objectives.next(objectives);
+  }
+
+  getObjective(id: string) {
+    return this.objectives.pipe(
+      take(1),
+      switchMap(objectives => {
+        return objectives.filter(o => o.id === id);
+      })
+    );
   }
 
   createObjective(objective: Objective) {
@@ -40,4 +49,6 @@ export class ObjectivesService {
       })
     );
   }
+
+  editObjective(objective: Objective) {}
 }

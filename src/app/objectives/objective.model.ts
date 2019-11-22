@@ -1,5 +1,5 @@
 export class Objective {
-  constructor(public title: string, public tasks: Task[]) {}
+  constructor(public id: string, public title: string, public tasks: Task[]) {}
 }
 
 export class Task {

@@ -14,6 +14,13 @@ const routes: Routes = [
       import("./new-objective/new-objective.module").then(
         m => m.NewObjectivePageModule
       )
+  },
+  {
+    path: ":objectiveId",
+    loadChildren: () =>
+      import("./objective-details/objective-details.module").then(
+        m => m.ObjectiveDetailsPageModule
+      )
   }
 ];
 

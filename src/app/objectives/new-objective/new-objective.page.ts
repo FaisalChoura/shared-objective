@@ -24,7 +24,9 @@ export class NewObjectivePage implements OnInit {
       return;
     }
     this.objectivesService
-      .createObjective(new Objective(this.form.value.title, []))
+      .createObjective(
+        new Objective(Math.random().toString(), this.form.value.title, [])
+      )
       .subscribe(() => {
         this.router.navigateByUrl("/objectives");
       });

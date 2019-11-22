@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/objectives"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ objective.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let task of tasks">
+      <ion-label>
+        <h2>{{ task.title }}</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" position="fixed">
+    <ion-fab-button>
+      <ion-icon name="add" (click)="newTaskModal()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

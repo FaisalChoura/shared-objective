@@ -1,20 +1,23 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { ObjectivesPageRoutingModule } from './objectives-routing.module';
+import { ObjectivesPageRoutingModule } from "./objectives-routing.module";
 
-import { ObjectivesPage } from './objectives.page';
+import { ObjectivesPage } from "./objectives.page";
+import { NewTaskComponent } from "./objective-details/new-task/new-task.component";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    NewTaskComponent,
     ObjectivesPageRoutingModule
   ],
-  declarations: [ObjectivesPage]
+  declarations: [ObjectivesPage],
+  entryComponents: [NewTaskComponent]
 })
 export class ObjectivesPageModule {}
