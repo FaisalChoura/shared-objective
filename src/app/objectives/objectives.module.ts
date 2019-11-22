@@ -14,10 +14,9 @@ import { NewTaskComponent } from "./objective-details/new-task/new-task.componen
     CommonModule,
     FormsModule,
     IonicModule,
-    NewTaskComponent,
     ObjectivesPageRoutingModule
   ],
-  declarations: [ObjectivesPage],
+  declarations: [ObjectivesPage, NewTaskComponent],
   entryComponents: [NewTaskComponent]
 })
 export class ObjectivesPageModule {}

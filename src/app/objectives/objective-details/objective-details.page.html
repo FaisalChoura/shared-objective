@@ -9,15 +9,15 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let task of tasks">
+    <ion-item *ngFor="let task of tasks" button (click)="goToTaskDetails(task)">
       <ion-label>
         <h2>{{ task.title }}</h2>
       </ion-label>
     </ion-item>
   </ion-list>
   <ion-fab vertical="bottom" horizontal="end" position="fixed">
-    <ion-fab-button>
-      <ion-icon name="add" (click)="newTaskModal()"></ion-icon>
+    <ion-fab-button (click)="newTaskModal()">
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

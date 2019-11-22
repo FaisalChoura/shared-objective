@@ -1,48 +1,70 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { NavController, ModalController } from "@ionic/angular";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NavController, ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
-import { ObjectivesService } from "../objectives.service";
-import { Objective, Task } from "../objective.model";
-import { NewTaskComponent } from "./new-task/new-task.component";
+import { ObjectivesService } from '../objectives.service';
+import { Objective, Task } from '../objective.model';
+import { NewTaskComponent } from './new-task/new-task.component';
+import { TasksService } from './tasks.service';
 
 @Component({
-  selector: "app-objective-details",
-  templateUrl: "./objective-details.page.html",
-  styleUrls: ["./objective-details.page.scss"]
+  selector: 'app-objective-details',
+  templateUrl: './objective-details.page.html',
+  styleUrls: ['./objective-details.page.scss']
 })
-export class ObjectiveDetailsPage implements OnInit {
+export class ObjectiveDetailsPage implements OnInit, OnDestroy {
   objective: Objective;
   tasks: Task[];
+  objectiveSub: Subscription;
   constructor(
     private objectivesService: ObjectivesService,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private tasksService: TasksService
   ) {}
 
   ngOnInit() {
     let id: string;
     this.route.paramMap.subscribe(paramMap => {
-      if (!paramMap.has("objectiveId")) {
-        this.navCtrl.navigateBack("/objectives");
+      if (!paramMap.has('objectiveId')) {
+        this.navCtrl.navigateBack('/objectives');
         return;
       }
-      id = paramMap.get("objectiveId");
+      id = paramMap.get('objectiveId');
     });
-    this.objectivesService.getObjective(id).subscribe(objective => {
-      this.objective = objective;
-      this.tasks = objective.tasks;
-    });
+    this.objectiveSub = this.objectivesService
+      .getObjective(id)
+      .subscribe(objective => {
+        this.objective = objective;
+        this.tasks = objective.tasks;
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.objectiveSub) {
+      this.objectiveSub.unsubscribe();
+    }
   }
 
   newTaskModal() {
     this.modalCtrl
       .create({
-        component: NewTaskComponent
+        component: NewTaskComponent,
+        componentProps: {
+          objective: this.objective
+        }
       })
       .then(modalEl => {
         modalEl.present();
       });
+  }
+  // TODO Figure out how to properly manage these kinds of routes
+  goToTaskDetails(task: Task) {
+    this.tasksService.setDisplayedTask(task);
+    this.navCtrl.navigateForward(
+      `/objectives/${this.objective.id}/task-details`
+    );
   }
 }
