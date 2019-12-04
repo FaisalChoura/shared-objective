@@ -1,54 +1,66 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { take, tap, switchMap } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable, combineLatest, forkJoin, of } from "rxjs";
+import { take, tap, map } from "rxjs/operators";
 
-import { Objective, Task } from './objective.model';
+import { Objective, Task } from "./objective.model";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  DocumentChangeAction
+} from "@angular/fire/firestore";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ObjectivesService {
   private _objectives = new BehaviorSubject<Objective[]>([]);
+  private objectivesCollection: AngularFirestoreCollection<Objective>;
+
+  constructor(private afs: AngularFirestore) {
+    this.objectivesCollection = afs.collection<Objective>("objectives");
+  }
 
   get objectives() {
-    return this._objectives.asObservable();
+    return this._objectives;
   }
 
-  constructor() {
-    const objectives: Objective[] = [
-      new Objective('123', 'Summer Trip 2020', [
-        new Task(
-          '123',
-          'Check available times',
-          'Contact everyone and check their free times'
-        )
-      ]),
-      new Objective('345', 'Plan April Web Summit', [
-        new Task(
-          '456',
-          'Collect vendor data',
-          'Contact all vendors and request their data'
-        )
-      ])
-    ];
-    this._objectives.next(objectives);
-  }
-
-  getObjective(id: string) {
-    return this.objectives.pipe(
-      switchMap(objectives => {
-        return objectives.filter(o => o.id === id);
-      })
-    );
-  }
-
-  createObjective(objective: Objective) {
-    return this.objectives.pipe(
-      take(1),
+  loadObjectives() {
+    return this.objectivesCollection.valueChanges({ idField: "id" }).pipe(
       tap(objectives => {
-        this._objectives.next(objectives.concat(objective));
+        this._objectives.next(objectives);
       })
     );
+  }
+
+  // fix type
+  getObjective(id: string) {
+    if (this.objectives.value.length === 0) {
+      return this.objectivesCollection
+        .doc(id)
+        .valueChanges()
+        .pipe(map(objective => [objective]));
+    }
+    return this.objectives.pipe(
+      map(objectives => {
+        return objectives.filter(obj => obj.id === id);
+      })
+    );
+  }
+
+  getObjectiveTasks(objectiveId: string) {
+    return this.afs
+      .collection<Task>("tasks", ref =>
+        ref.where("objectiveId", "==", objectiveId)
+      )
+      .valueChanges();
+  }
+
+  // TODO fix how the data is added (create own interface)
+  createObjective(objective: Objective) {
+    return this.objectivesCollection.add({
+      title: objective.title,
+      tasks: objective.tasks
+    } as Objective);
   }
 
   updateObjective(objective: Objective) {

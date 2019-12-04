@@ -1,16 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
-import { Task, Objective } from '../../objective.model';
-import { TasksService } from '../tasks.service';
-import { Subscription } from 'rxjs';
+import { Task, Objective } from "../../objective.model";
+import { TasksService } from "../tasks.service";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-task-details',
-  templateUrl: './task-details.page.html',
-  styleUrls: ['./task-details.page.scss']
+  selector: "app-task-details",
+  templateUrl: "./task-details.page.html",
+  styleUrls: ["./task-details.page.scss"]
 })
-// TODO Change how this works after adding users and assigning tasks (this would probably need to be it's own thing with an ID)
+// TODO Change how this works after adding users and assigning tasks (this would probably need to be it's own page with an ID)
 export class TaskDetailsPage implements OnInit, OnDestroy {
   task: Task;
   objectiveId: string;
@@ -25,8 +25,8 @@ export class TaskDetailsPage implements OnInit, OnDestroy {
       this.task = task;
     });
     this.route.paramMap.subscribe(paramMap => {
-      if (!paramMap.has('objectiveId')) {
-        this.objectiveId = paramMap.get('objectiveId');
+      if (!paramMap.has("objectiveId")) {
+        this.objectiveId = paramMap.get("objectiveId");
       }
     });
   }
