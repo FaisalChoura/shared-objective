@@ -32,13 +32,12 @@ export class ObjectivesService {
     );
   }
 
-  // fix type
-  getObjective(id: string) {
+  getObjective(id: string): Observable<Objective[]> {
     if (this.objectives.value.length === 0) {
       return this.objectivesCollection
         .doc(id)
         .valueChanges()
-        .pipe(map(objective => [objective]));
+        .pipe(map((objective: Objective) => [objective]));
     }
     return this.objectives.pipe(
       map(objectives => {
