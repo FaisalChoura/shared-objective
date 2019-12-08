@@ -14,8 +14,10 @@ Will constantly improve code quality and documentation.
 - Edit Objectives and Tasks
 - Delete Objectives and Tasks
 - Add Loading spinners
+- Add auto login (using capacitor plugin)
 - User Task Sharing
 - Task Comments
+- Turn it into PWA
 
 ## Refactoring
 
