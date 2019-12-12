@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { Task } from "../objective.model";
+import { Task } from "./objective.model";
 import {
   AngularFirestore,
   AngularFirestoreCollection,

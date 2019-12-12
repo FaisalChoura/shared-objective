@@ -10,7 +10,8 @@ Will constantly improve code quality and documentation.
 - ~~Create Tasks~~
 - ~~Link Firebase~~
 - ~~Create services to talk to Firebase collections~~
-- Add Users/Authentication (redesign firestore data structure)
+- ~~Add Users/Authentication~~
+- (redesign firestore data structure)
 - Edit Objectives and Tasks
 - Delete Objectives and Tasks
 - Add Loading spinners

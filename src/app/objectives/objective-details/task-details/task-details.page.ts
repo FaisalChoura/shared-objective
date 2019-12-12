@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { Task, Objective } from "../../objective.model";
-import { TasksService } from "../tasks.service";
+import { TasksService } from "../../tasks.service";
 import { Subscription } from "rxjs";
 
 @Component({

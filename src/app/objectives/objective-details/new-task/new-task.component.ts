@@ -4,7 +4,7 @@ import { NgForm } from "@angular/forms";
 
 import { ObjectivesService } from "../../objectives.service";
 import { Objective, Task } from "../../objective.model";
-import { TasksService } from "../tasks.service";
+import { TasksService } from "../../tasks.service";
 
 @Component({
   selector: "app-new-task",

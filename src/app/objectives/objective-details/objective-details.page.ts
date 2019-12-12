@@ -6,7 +6,7 @@ import { Subscription, Observable } from "rxjs";
 import { ObjectivesService } from "../objectives.service";
 import { Objective, Task } from "../objective.model";
 import { NewTaskComponent } from "./new-task/new-task.component";
-import { TasksService } from "./tasks.service";
+import { TasksService } from "../tasks.service";
 
 @Component({
   selector: "app-objective-details",
