@@ -17,6 +17,7 @@ export class ObjectiveDetailsPage implements OnInit, OnDestroy {
   objective: Objective;
   tasks: Task[];
   objectiveSub: Subscription;
+  isLoading: boolean = true;
   constructor(
     private objectivesService: ObjectivesService,
     private route: ActivatedRoute,
@@ -24,7 +25,7 @@ export class ObjectiveDetailsPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private tasksService: TasksService
   ) {}
-
+  // TODO Fix double subscriptions
   ngOnInit() {
     let id: string;
     this.objective = new Objective(null, null, null);
@@ -43,6 +44,7 @@ export class ObjectiveDetailsPage implements OnInit, OnDestroy {
         this.objectivesService.getObjectiveTasks(id).subscribe(tasks => {
           this.objective.tasks = tasks;
           this.tasks = tasks;
+          this.isLoading = false;
         });
       });
   }

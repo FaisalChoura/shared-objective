@@ -6,15 +6,26 @@
     <ion-title>{{ objective.title }}</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<!-- TODO Figure out how to properly show spinner -->
 <ion-content>
-  <ion-list *ngIf="tasks && tasks.length > 0">
-    <ion-item *ngFor="let task of tasks" button (click)="goToTaskDetails(task)">
-      <ion-label>
-        <h2>{{ task.title }}</h2>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <div *ngIf="!isLoading; else loading">
+    <ion-list *ngIf="tasks && tasks.length > 0">
+      <ion-item
+        *ngFor="let task of tasks"
+        button
+        (click)="goToTaskDetails(task)"
+      >
+        <ion-label>
+          <h2>{{ task.title }}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+  <ng-template #loading>
+    <div class="spinner">
+      <ion-spinner></ion-spinner>
+    </div>
+  </ng-template>
   <ion-fab vertical="bottom" horizontal="end" position="fixed">
     <ion-fab-button (click)="newTaskModal()">
       <ion-icon name="add"></ion-icon>

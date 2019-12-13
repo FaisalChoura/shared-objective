@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 
 import { ObjectivesService } from "./objectives.service";
-import { Objective } from "./objective.model";
-import { shareReplay } from "rxjs/operators";
 
 @Component({
   selector: "app-objectives",
@@ -11,19 +9,28 @@ import { shareReplay } from "rxjs/operators";
   styleUrls: ["./objectives.page.scss"]
 })
 export class ObjectivesPage implements OnInit, OnDestroy {
-  objectives;
-  objectivesSub: Subscription;
+  public objectives;
+  public isLoading = true;
+  private _objectivesSub: Subscription;
 
   constructor(private objectivesService: ObjectivesService) {}
 
+  // TODO this does not look right
   ngOnInit() {
-    this.objectivesService.loadObjectives().subscribe();
+    // This is the initial call to load objectives from firebase
+    this._objectivesSub = this.objectivesService
+      .loadObjectives()
+      .subscribe(() => {
+        this.isLoading = false;
+      });
+
+    // This assign the objectives after the call
     this.objectives = this.objectivesService.objectives;
   }
 
   ngOnDestroy() {
-    if (this.objectivesSub) {
-      this.objectivesSub.unsubscribe();
+    if (this._objectivesSub) {
+      this._objectivesSub.unsubscribe();
     }
   }
 }

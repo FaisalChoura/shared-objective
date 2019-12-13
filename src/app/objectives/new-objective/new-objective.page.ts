@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { ObjectivesService } from "../objectives.service";
 import { Objective } from "../objective.model";
 import { AuthService } from "src/app/auth/auth.service";
+import { LoadingController } from "@ionic/angular";
 
 @Component({
   selector: "app-new-objective",
@@ -17,7 +18,8 @@ export class NewObjectivePage implements OnInit {
   constructor(
     private objectivesService: ObjectivesService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {
@@ -30,10 +32,18 @@ export class NewObjectivePage implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    this.objectivesService
-      .createObjective(new Objective(this.form.value.title, [], this._userId))
-      .then(() => {
-        this.router.navigateByUrl("/objectives");
+    this.loadingCtrl
+      .create({ message: "Creating Objective" })
+      .then(loadingEl => {
+        loadingEl.present();
+        this.objectivesService
+          .createObjective(
+            new Objective(this.form.value.title, [], this._userId)
+          )
+          .then(() => {
+            loadingEl.dismiss();
+            this.router.navigateByUrl("/objectives");
+          });
       });
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController, LoadingController } from "@ionic/angular";
 import { NgForm } from "@angular/forms";
 
 import { ObjectivesService } from "../../objectives.service";
@@ -19,7 +19,8 @@ export class NewTaskComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private authService: AuthService,
-    private tasksService: TasksService
+    private tasksService: TasksService,
+    private loadingCtrl: LoadingController
   ) {}
   // TODO close subscriptions
   ngOnInit() {
@@ -35,14 +36,18 @@ export class NewTaskComponent implements OnInit {
       this.modalCtrl.dismiss();
       return;
     }
-    const newTask: Task = new Task(
-      this.form.value.title,
-      this.form.value.description,
-      this.objective.id,
-      this._userId
-    );
-    this.tasksService.newTask(newTask).then(() => {
-      this.modalCtrl.dismiss();
+    this.loadingCtrl.create({ message: "Creating Task" }).then(loadingEl => {
+      loadingEl.present();
+      const newTask: Task = new Task(
+        this.form.value.title,
+        this.form.value.description,
+        this.objective.id,
+        this._userId
+      );
+      this.tasksService.newTask(newTask).then(() => {
+        loadingEl.dismiss();
+        this.modalCtrl.dismiss();
+      });
     });
   }
 }

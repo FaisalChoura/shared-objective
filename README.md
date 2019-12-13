@@ -4,7 +4,7 @@ This is an Ionic-Angular and Firebase project created to be a reference for cont
 
 Will constantly improve code quality and documentation.
 
-## TODO
+## Backlog
 
 - ~~Create Objectives~~
 - ~~Create Tasks~~
@@ -14,10 +14,12 @@ Will constantly improve code quality and documentation.
 - (redesign firestore data structure)
 - Edit Objectives and Tasks
 - Delete Objectives and Tasks
-- Add Loading spinners
+- ~~Add Loading spinners~~
 - Add auto login (using capacitor plugin)
 - User Task Sharing
 - Task Comments
+- Add Image to task
+- Add Location to task
 - Turn it into PWA
 
 ## Refactoring
