@@ -13,6 +13,18 @@ export class AuthService {
   get user(): Observable<firebase.User> {
     return this.afAuth.user;
   }
+
+  get userId(): Observable<string> {
+    return this.user.pipe(
+      switchMap(user => {
+        if (user) {
+          return of(user.uid);
+        }
+        return of(null);
+      })
+    );
+  }
+
   public isLoggedIn() {
     return this.afAuth.user.pipe(
       switchMap(user => {

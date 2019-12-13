@@ -30,7 +30,8 @@ export class TasksService {
     return this.tasksCollection.add({
       title: task.title,
       description: task.description,
-      objectiveId: task.objectiveId
+      objectiveId: task.objectiveId,
+      ownerId: task.ownerId
     });
   }
 }

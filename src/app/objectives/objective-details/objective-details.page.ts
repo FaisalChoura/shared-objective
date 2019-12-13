@@ -39,7 +39,7 @@ export class ObjectiveDetailsPage implements OnInit, OnDestroy {
       .getObjective(id)
       .subscribe(doc => {
         const obj = doc[0];
-        this.objective = new Objective(id, obj.title, []);
+        this.objective = new Objective(obj.title, [], null, id);
         this.objectivesService.getObjectiveTasks(id).subscribe(tasks => {
           this.objective.tasks = tasks;
           this.tasks = tasks;

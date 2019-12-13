@@ -1,5 +1,10 @@
 export class Objective {
-  constructor(public id: string, public title: string, public tasks: Task[]) {}
+  constructor(
+    public title: string,
+    public tasks: Task[],
+    public ownerId: string,
+    public id?: string
+  ) {}
 }
 
 export class Task {
@@ -7,6 +12,7 @@ export class Task {
     public title: string,
     public description: string,
     public objectiveId: string,
+    public ownerId: string,
     public id?: string
   ) {}
 }
