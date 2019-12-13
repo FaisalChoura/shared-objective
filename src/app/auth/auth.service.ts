@@ -2,16 +2,27 @@ import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import { Observable, of } from "rxjs";
-import { first } from "rxjs/operators";
+import { first, map, switchMap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
   constructor(private afAuth: AngularFireAuth, private router: Router) {}
-  // TODO Change name of method and restructure how this works
-  public isLoggedIn() {
+
+  get user(): Observable<firebase.User> {
     return this.afAuth.user;
+  }
+  public isLoggedIn() {
+    return this.afAuth.user.pipe(
+      switchMap(user => {
+        if (user) {
+          return of(true);
+        } else {
+          return of(false);
+        }
+      })
+    );
   }
 
   public login(email, password): Promise<firebase.auth.UserCredential> {

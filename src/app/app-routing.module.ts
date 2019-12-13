@@ -6,18 +6,17 @@ const routes: Routes = [
   {
     path: "",
     redirectTo: "objectives",
-    canLoad: [AuthGuard],
     pathMatch: "full"
-  },
-  {
-    path: "objectives",
-    canLoad: [AuthGuard],
-    loadChildren: () =>
-      import("./objectives/objectives.module").then(m => m.ObjectivesPageModule)
   },
   {
     path: "auth",
     loadChildren: () => import("./auth/auth.module").then(m => m.AuthPageModule)
+  },
+  {
+    path: "objectives",
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import("./objectives/objectives.module").then(m => m.ObjectivesPageModule)
   }
 ];
 

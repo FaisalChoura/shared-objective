@@ -15,12 +15,12 @@
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
-          <ion-item *ngIf="!loggedIn" routerLink="/auth">
+          <ion-item *ngIf="!(loggedIn | async)" routerLink="/auth">
             <ion-label>Login</ion-label>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
-          <ion-item *ngIf="loggedIn" (click)="logout()" button>
+          <ion-item *ngIf="loggedIn | async" (click)="logout()" button>
             <ion-label>Log out</ion-label>
           </ion-item>
         </ion-menu-toggle>

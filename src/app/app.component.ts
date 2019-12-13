@@ -5,6 +5,7 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AuthService } from "./auth/auth.service";
 import { tap } from "rxjs/operators";
+import { Observable, of } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -12,7 +13,7 @@ import { tap } from "rxjs/operators";
   styleUrls: ["app.component.scss"]
 })
 export class AppComponent implements OnInit {
-  loggedIn = false;
+  loggedIn: Observable<boolean> = of(false);
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -23,18 +24,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService
-      .isLoggedIn()
-      .pipe(
-        tap(user => {
-          if (user) {
-            this.loggedIn = true;
-          } else {
-            this.loggedIn = false;
-          }
-        })
-      )
-      .subscribe();
+    this.loggedIn = this.authService.isLoggedIn();
   }
 
   logout() {
