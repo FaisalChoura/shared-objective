@@ -1,0 +1,8 @@
+{
+  "appId": "io.shared.objectives",
+  "appName": "shared-objectives",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
