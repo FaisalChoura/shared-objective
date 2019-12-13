@@ -13,7 +13,7 @@ import { AuthService } from "src/app/auth/auth.service";
 })
 export class NewObjectivePage implements OnInit {
   @ViewChild("f", { static: false }) form: NgForm;
-  private _user: firebase.User;
+  private _userId: string;
   constructor(
     private objectivesService: ObjectivesService,
     private router: Router,
@@ -21,8 +21,8 @@ export class NewObjectivePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.authService.user.subscribe(user => {
-      this._user = user;
+    this.authService.userId.subscribe(userId => {
+      this._userId = userId;
     });
   }
 
@@ -31,7 +31,7 @@ export class NewObjectivePage implements OnInit {
       return;
     }
     this.objectivesService
-      .createObjective(new Objective(this.form.value.title, [], this._user.uid))
+      .createObjective(new Objective(this.form.value.title, [], this._userId))
       .then(() => {
         this.router.navigateByUrl("/objectives");
       });

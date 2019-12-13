@@ -5,6 +5,7 @@ import { NgForm } from "@angular/forms";
 import { ObjectivesService } from "../../objectives.service";
 import { Objective, Task } from "../../objective.model";
 import { TasksService } from "../../tasks.service";
+import { AuthService } from "src/app/auth/auth.service";
 
 @Component({
   selector: "app-new-task",
@@ -14,28 +15,31 @@ import { TasksService } from "../../tasks.service";
 export class NewTaskComponent implements OnInit {
   @Input() objective: Objective;
   @ViewChild("f", { static: false }) form: NgForm;
-
+  private _userId: string;
   constructor(
     private modalCtrl: ModalController,
-    private objectivesService: ObjectivesService,
+    private authService: AuthService,
     private tasksService: TasksService
   ) {}
-
-  ngOnInit() {}
+  // TODO close subscriptions
+  ngOnInit() {
+    this.authService.userId.subscribe(userId => (this._userId = userId));
+  }
 
   closeModal() {
     this.modalCtrl.dismiss();
   }
 
   onCreateTask() {
-    if (!this.form.valid) {
+    if (!this.form.valid && this._userId) {
       this.modalCtrl.dismiss();
       return;
     }
     const newTask: Task = new Task(
       this.form.value.title,
       this.form.value.description,
-      this.objective.id
+      this.objective.id,
+      this._userId
     );
     this.tasksService.newTask(newTask).then(() => {
       this.modalCtrl.dismiss();
