@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -6,15 +6,17 @@ import { ObjectivesService } from "../objectives.service";
 import { Objective } from "../objective.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { LoadingController } from "@ionic/angular";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-new-objective",
   templateUrl: "./new-objective.page.html",
   styleUrls: ["./new-objective.page.scss"]
 })
-export class NewObjectivePage implements OnInit {
+export class NewObjectivePage implements OnInit, OnDestroy {
   @ViewChild("f", { static: false }) form: NgForm;
   private _userId: string;
+  private _authSub: Subscription;
   constructor(
     private objectivesService: ObjectivesService,
     private router: Router,
@@ -23,9 +25,15 @@ export class NewObjectivePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.authService.userId.subscribe(userId => {
+    this._authSub = this.authService.userId.subscribe(userId => {
       this._userId = userId;
     });
+  }
+
+  ngOnDestroy() {
+    if (this._authSub) {
+      this._authSub.unsubscribe();
+    }
   }
 
   onCreateObjective() {

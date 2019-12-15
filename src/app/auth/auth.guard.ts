@@ -16,10 +16,10 @@ import { tap, take } from "rxjs/operators";
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  // TODO implement auto login
   // TODO Add guard to auth page if user is signed in
-  // TODO Figure out you need take(1)
   // TODO Figure out why canLoad didn't work and canActivate did
+
+  // Take is used because we need only one emission per guard check
   canActivate(
     route: ActivatedRouteSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {

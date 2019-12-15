@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy } from "@angular/core";
 import { ModalController, LoadingController } from "@ionic/angular";
 import { NgForm } from "@angular/forms";
 
@@ -6,15 +6,17 @@ import { ObjectivesService } from "../../objectives.service";
 import { Objective, Task } from "../../objective.model";
 import { TasksService } from "../../tasks.service";
 import { AuthService } from "src/app/auth/auth.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-new-task",
   templateUrl: "./new-task.component.html",
   styleUrls: ["./new-task.component.scss"]
 })
-export class NewTaskComponent implements OnInit {
+export class NewTaskComponent implements OnInit, OnDestroy {
   @Input() objective: Objective;
   @ViewChild("f", { static: false }) form: NgForm;
+  private authSub: Subscription;
   private _userId: string;
   constructor(
     private modalCtrl: ModalController,
@@ -22,9 +24,15 @@ export class NewTaskComponent implements OnInit {
     private tasksService: TasksService,
     private loadingCtrl: LoadingController
   ) {}
-  // TODO close subscriptions
   ngOnInit() {
-    this.authService.userId.subscribe(userId => (this._userId = userId));
+    this.authSub = this.authService.userId.subscribe(
+      userId => (this._userId = userId)
+    );
+  }
+  ngOnDestroy() {
+    if (this.authSub) {
+      this.authSub.unsubscribe();
+    }
   }
 
   closeModal() {

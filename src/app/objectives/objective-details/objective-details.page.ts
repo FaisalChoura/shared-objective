@@ -7,6 +7,7 @@ import { ObjectivesService } from "../objectives.service";
 import { Objective, Task } from "../objective.model";
 import { NewTaskComponent } from "./new-task/new-task.component";
 import { TasksService } from "../tasks.service";
+import { switchMap, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-objective-details",
@@ -25,10 +26,11 @@ export class ObjectiveDetailsPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private tasksService: TasksService
   ) {}
-  // TODO Fix double subscriptions
   ngOnInit() {
     let id: string;
     this.objective = new Objective(null, null, null);
+    // No need to unsubscribe from route because Activated Route destroys the subscription
+    // when it's no longer needed
     this.route.paramMap.subscribe(paramMap => {
       if (!paramMap.has("objectiveId")) {
         this.navCtrl.navigateBack("/objectives");
@@ -36,17 +38,21 @@ export class ObjectiveDetailsPage implements OnInit, OnDestroy {
       }
       id = paramMap.get("objectiveId");
     });
-    this.objectiveSub = this.objectivesService
+    this.objectivesService
       .getObjective(id)
-      .subscribe(doc => {
-        const obj = doc[0];
-        this.objective = new Objective(obj.title, [], null, id);
-        this.objectivesService.getObjectiveTasks(id).subscribe(tasks => {
+      .pipe(
+        switchMap(doc => {
+          const obj = doc[0];
+          this.objective = new Objective(obj.title, [], null, id);
+          return this.objectivesService.getObjectiveTasks(id);
+        }),
+        tap(tasks => {
           this.objective.tasks = tasks;
           this.tasks = tasks;
           this.isLoading = false;
-        });
-      });
+        })
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
